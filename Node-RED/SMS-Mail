@@ -1,0 +1,236 @@
+[
+    {
+        "id": "706fecd4.6f91a4",
+        "type": "ui_gauge",
+        "z": "fc616eccecc9225c",
+        "name": "",
+        "group": "37de8fe8.46846",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Temperature",
+        "label": "ºC",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "40",
+        "colors": [
+            "#00b500",
+            "#f7df09",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 1490,
+        "y": 1340,
+        "wires": []
+    },
+    {
+        "id": "38ee750dfd12b3b7",
+        "type": "mqtt in",
+        "z": "fc616eccecc9225c",
+        "name": "Capteur de température",
+        "topic": "esp/DBJ/ds18b20/temperature",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "aadd87591ac8b54d",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 1160,
+        "y": 1380,
+        "wires": [
+            [
+                "42519ea3bfb501ac",
+                "84b6695c33792255",
+                "706fecd4.6f91a4"
+            ]
+        ]
+    },
+    {
+        "id": "42519ea3bfb501ac",
+        "type": "function",
+        "z": "fc616eccecc9225c",
+        "name": "Envoi de message",
+        "func": "var temp = msg.payload;\n\nvar d = new Date();\nvar message = \"\";\n// if temp more than 22, prepare sms\nif (msg.payload >= 15) {\n    msg.topic = \"33767609837\"  // your number\n    msg.payload = \"ATTENTION. Température supérieur à 22°C\" // your pre-defined msg\n    msg.payload = \"time:\" + d + message + msg.payload + \"La température est de : \" + temp;\n    return msg;\n}\nelse {\n    msg.reset = true  // reset the delay\n    return msg\n}\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1550,
+        "y": 1400,
+        "wires": [
+            [
+                "9bcd71ddcc6f50ba"
+            ]
+        ]
+    },
+    {
+        "id": "9bcd71ddcc6f50ba",
+        "type": "delay",
+        "z": "fc616eccecc9225c",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "1",
+        "timeoutUnits": "minutes",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1740,
+        "y": 1420,
+        "wires": [
+            [
+                "eec80e077ccfcc4e"
+            ]
+        ]
+    },
+    {
+        "id": "eec80e077ccfcc4e",
+        "type": "twilio out",
+        "z": "fc616eccecc9225c",
+        "twilio": "0131489ed5e40fc8",
+        "twilioType": "sms",
+        "url": "",
+        "number": "33767609837",
+        "name": "",
+        "x": 1930,
+        "y": 1420,
+        "wires": []
+    },
+    {
+        "id": "84b6695c33792255",
+        "type": "function",
+        "z": "fc616eccecc9225c",
+        "name": "Envoi de message",
+        "func": "var temp = msg.payload;\n\n// if temp more than 15, prepare mail\nif (msg.payload >= 15) {\n    msg.topic = \" ATTENTION ! La température est trop haute, elle est de :\" + temp;\n    return msg;\n}   \n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1510,
+        "y": 1500,
+        "wires": [
+            [
+                "0877b922dd2b89b0"
+            ]
+        ]
+    },
+    {
+        "id": "0877b922dd2b89b0",
+        "type": "delay",
+        "z": "fc616eccecc9225c",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "10",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1680,
+        "y": 1520,
+        "wires": [
+            [
+                "d90292889ef84822",
+                "8a70e6bfd6941a0b"
+            ]
+        ]
+    },
+    {
+        "id": "8a70e6bfd6941a0b",
+        "type": "sendgrid",
+        "z": "fc616eccecc9225c",
+        "from": "denis.bui@uha.fr",
+        "to": "denis.bui@uha.fr",
+        "name": "",
+        "content": "text",
+        "credentials": {},
+        "x": 1920,
+        "y": 1560,
+        "wires": []
+    },
+    {
+        "id": "d90292889ef84822",
+        "type": "debug",
+        "z": "fc616eccecc9225c",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1940,
+        "y": 1500,
+        "wires": []
+    },
+    {
+        "id": "37de8fe8.46846",
+        "type": "ui_group",
+        "name": "Contrôle de la maison",
+        "tab": "53b8c8f9.cfbe48",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "aadd87591ac8b54d",
+        "type": "mqtt-broker",
+        "name": "Broker privé",
+        "broker": "192.168.2.150",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "0131489ed5e40fc8",
+        "type": "twilio-api",
+        "name": "Compte Twilio",
+        "sid": "AC7a5806a8c096a1d2e13b6c96f6423b91",
+        "from": "13464886845"
+    },
+    {
+        "id": "53b8c8f9.cfbe48",
+        "type": "ui_tab",
+        "name": "Home",
+        "icon": "dashboard",
+        "order": 2,
+        "disabled": false,
+        "hidden": false
+    }
+]
