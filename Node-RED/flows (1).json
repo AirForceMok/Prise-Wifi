@@ -1,0 +1,55 @@
+[
+    {
+        "id": "9e30e6453ec3acf4",
+        "type": "ui_switch",
+        "z": "fc616eccecc9225c",
+        "name": "",
+        "label": "Etat de la Led",
+        "tooltip": "",
+        "group": "37de8fe8.46846",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "decouple": "false",
+        "topic": "esp/bui/test",
+        "topicType": "msg",
+        "style": "",
+        "onvalue": "on",
+        "onvalueType": "str",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "off",
+        "offvalueType": "str",
+        "officon": "",
+        "offcolor": "",
+        "animate": true,
+        "x": 400,
+        "y": 480,
+        "wires": [
+            [
+                "5ed07f4ed82c0866"
+            ]
+        ],
+        "icon": "font-awesome/fa-lightbulb-o"
+    },
+    {
+        "id": "37de8fe8.46846",
+        "type": "ui_group",
+        "name": "DS18B20",
+        "tab": "53b8c8f9.cfbe48",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "53b8c8f9.cfbe48",
+        "type": "ui_tab",
+        "name": "Home",
+        "icon": "dashboard",
+        "order": 2,
+        "disabled": false,
+        "hidden": false
+    }
+]
